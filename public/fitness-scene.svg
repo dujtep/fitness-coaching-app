@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200" role="img" aria-label="Dark gym background">
+  <rect width="1800" height="1200" fill="#111722"/>
+  <rect y="760" width="1800" height="440" fill="#1f2633"/>
+  <rect x="90" y="120" width="1620" height="580" rx="28" fill="#171d29"/>
+  <path d="M150 650h1500" stroke="#303848" stroke-width="16" stroke-linecap="round"/>
+  <path d="M190 170h1420M190 250h1420M190 330h1420" stroke="#273142" stroke-width="5"/>
+  <circle cx="420" cy="470" r="74" fill="#f36a2e"/>
+  <path d="M420 546v178m-112-68 224-72m-152 140-78 150m154-150 92 150" stroke="#f2f4f7" stroke-width="34" stroke-linecap="round"/>
+  <circle cx="780" cy="520" r="62" fill="#f8a11f"/>
+  <path d="M780 588v158m-132-28h264m-206 28-98 118m218-118 100 118" stroke="#f2f4f7" stroke-width="30" stroke-linecap="round"/>
+  <rect x="1135" y="446" width="350" height="46" rx="23" fill="#f36a2e"/>
+  <circle cx="1098" cy="469" r="62" fill="#f2f4f7"/>
+  <circle cx="1522" cy="469" r="62" fill="#f2f4f7"/>
+  <rect x="1214" y="330" width="220" height="44" rx="22" fill="#f8a11f"/>
+  <rect x="1260" y="374" width="128" height="98" fill="#2c3445"/>
+  <rect x="206" y="920" width="1388" height="36" rx="18" fill="#303848"/>
+  <rect x="310" y="970" width="1180" height="30" rx="15" fill="#384253"/>
+</svg>

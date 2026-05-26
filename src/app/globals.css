@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 222 26% 8%;
+  --foreground: 210 30% 96%;
+  --muted: 220 17% 20%;
+  --muted-foreground: 215 14% 70%;
+  --border: 222 15% 24%;
+  --primary: 18 88% 56%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 39 92% 56%;
+  --accent-foreground: 0 0% 100%;
+  --danger: 357 68% 54%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 72% 9%, rgba(238, 102, 43, 0.16), transparent 28rem),
+    linear-gradient(180deg, rgba(17, 22, 32, 0.88), rgba(13, 18, 28, 0.98)),
+    url("/fitness-scene.svg");
+  background-attachment: fixed;
+  background-position: center top;
+  background-size: cover;
+  color: hsl(var(--foreground));
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  backdrop-filter: saturate(112%);
+}
+
+.panel {
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: rgba(35, 41, 55, 0.92);
+  box-shadow: 0 18px 58px rgba(0, 0, 0, 0.24);
+}
+
+.field {
+  width: 100%;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  background: rgba(19, 24, 34, 0.92);
+  padding: 0.7rem 0.8rem;
+  color: hsl(var(--foreground));
+  outline: none;
+}
+
+.field:focus {
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.16);
+}
+
+.icon-button {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 8px;
+  padding: 0 0.85rem;
+  font-weight: 700;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.icon-button:hover {
+  transform: translateY(-1px);
+}

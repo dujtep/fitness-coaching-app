@@ -1,0 +1,231 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  TRAINER
+}
+
+enum Goal {
+  FAT_LOSS
+  MUSCLE_GAIN
+  MAINTENANCE
+}
+
+enum BodyType {
+  ECTOMORPH
+  MESOMORPH
+  ENDOMORPH
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  PACKING
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String?
+  role         Role      @default(CUSTOMER)
+  customer     Customer?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Customer {
+  id                    String                @id @default(cuid())
+  userId                String                @unique
+  user                  User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gender                String
+  age                   Int
+  height                Float
+  weight                Float
+  bodyFatPercentage     Float?
+  goal                  Goal
+  bodyType              BodyType?
+  medicalCondition      String?
+  workLifestyle         String?
+  trainingFrequency     Int
+  injuryAssessment      InjuryAssessment?
+  nutritionTarget       NutritionTarget?
+  dailyTrackings        DailyTracking[]
+  programFeedbacks      ProgramFeedback[]
+  trainerRequests       TrainerContactRequest[]
+  orders                Order[]
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+}
+
+model InjuryAssessment {
+  id               String   @id @default(cuid())
+  customerId       String   @unique
+  customer         Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  hasLowerBackPain Boolean  @default(false)
+  hasShoulderPain  Boolean  @default(false)
+  hasKneeValgus    Boolean  @default(false)
+  hasFlatFeet      Boolean  @default(false)
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Program {
+  id                String            @id @default(cuid())
+  name              String
+  type              String
+  goal              Goal
+  bodyType          BodyType?
+  trainingFrequency Int
+  description       String
+  durationWeeks     Int
+  isInjuryBased     Boolean           @default(false)
+  workoutPlans      WorkoutPlan[]
+  feedbacks         ProgramFeedback[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model Exercise {
+  id              String            @id @default(cuid())
+  name            String
+  description     String
+  targetMuscle    String
+  secondaryMuscle String?
+  sets            Int
+  reps            String
+  restTime        String
+  videoUrl        String?
+  warning         String?
+  workoutItems    WorkoutPlanItem[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model WorkoutPlan {
+  id          String            @id @default(cuid())
+  programId   String
+  program     Program           @relation(fields: [programId], references: [id], onDelete: Cascade)
+  dayNumber   Int
+  title       String
+  description String
+  items       WorkoutPlanItem[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model WorkoutPlanItem {
+  id            String      @id @default(cuid())
+  workoutPlanId String
+  workoutPlan   WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
+  exerciseId    String
+  exercise      Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  sortOrder     Int
+}
+
+model NutritionTarget {
+  id            String   @id @default(cuid())
+  customerId    String   @unique
+  customer      Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  dailyCalories Int
+  protein       Int
+  carbohydrate  Int
+  fat           Int
+  waterTarget   Float    @default(3)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model DailyTracking {
+  id               String   @id @default(cuid())
+  customerId       String
+  customer         Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  date             DateTime
+  calories         Int
+  protein          Int
+  carbohydrate     Int
+  fat              Int
+  waterIntake      Float
+  bodyWeight       Float
+  workoutCompleted Boolean  @default(false)
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([customerId, date])
+}
+
+model ProgramFeedback {
+  id                 String   @id @default(cuid())
+  customerId         String
+  customer           Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  programId          String
+  program            Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  completionRate     Float
+  averageCalories    Float
+  averageProtein     Float
+  averageWaterIntake Float
+  startWeight        Float
+  endWeight          Float
+  weightChange       Float
+  aiFeedback         String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  price       Decimal
+  stock       Int
+  imageUrl    String?
+  orders      OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  customerId  String
+  customer    Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  status      OrderStatus @default(PENDING_PAYMENT)
+  totalAmount Decimal
+  items       OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Decimal
+}
+
+model TrainerContactRequest {
+  id          String   @id @default(cuid())
+  customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  topic       String
+  message     String
+  paymentNote String?
+  status      String   @default("WAITING_PAYMENT")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
